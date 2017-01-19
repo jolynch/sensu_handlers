@@ -5,9 +5,13 @@ require "#{File.dirname(__FILE__)}/base"
 class Jira < BaseHandler
 
   def build_labels
-    [ "SENSU_#{@event['client']['name']}",
+    [
+      "SENSU_#{@event['client']['name']}",
       "SENSU_#{@event['check']['name']}",
-      "SENSU", *@event['check']['tags'] ].uniq.reject { |x| x.nil? }.map { |x|
+      "SENSU",
+      *@event['check']['tags'],
+      *team_data('tags'),
+    ].uniq.reject { |x| x.nil? }.map { |x|
         x.strip.gsub(/\s+/, '_') }
   end
 
